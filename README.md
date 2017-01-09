@@ -100,6 +100,9 @@ Parameters of initializing `act_as_page_extractor options: { ... }`:
 `file_storage` - path for saving tmp files (by default it is "public")
 `pdf_storage` - path for saving pdf (by default it is "public/uploads/extracted/pdf")
 
+## Run tests
+    $ COVERAGE=true rspec
+
 ## Contributing
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
