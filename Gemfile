@@ -14,6 +14,9 @@ gem 'pdf-reader'          # need for pdf_utils
 gem 'total_compressor'    # decompressing files
 gem 'filesize'            # pretty size of file
 
-gem 'rspec' , '>= 2.14'
-gem 'simplecov', require: false, group: :test
 gem 'byebug'
+
+group :test do
+  gem 'rspec' , '>= 2.14'
+  gem 'simplecov', require: false, group: :test
+end

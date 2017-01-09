@@ -1,3 +1,4 @@
+# :nocov:
 require 'rails/generators/active_record'
 require 'rails/generators/base'
 
@@ -45,3 +46,4 @@ module ActAsPageExtractor
     end
   end
 end
+# :nocov:
