@@ -1,0 +1,14 @@
+module ActAsPageExtractor
+  def self.import_files(directory: nil)
+    return unless directory
+
+    Dir["#{directory}/*"].each do |fname|
+      ap fname
+      document = <%=document_class%>.new(
+        name: fname.split('/').last
+      )
+      document.send("#{extracted_filename}=".to_sym, File.open(fname))
+      document.save!
+    end
+  end
+end

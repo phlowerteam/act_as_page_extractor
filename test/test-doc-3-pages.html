@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title></title>
+	<meta name="generator" content="LibreOffice 4.2.8.2 (Linux)">
+	<meta name="created" content="20160916;170510000000000">
+	<meta name="changed" content="0;0">
+	<style type="text/css">
+	<!--
+		@page { size: 8.5in 11in; margin: 0.79in }
+		p { margin-bottom: 0.1in; direction: ltr; color: #00000a; line-height: 120%; text-align: left; widows: 0; orphans: 0 }
+		p.western { font-family: "Liberation Serif", serif; font-size: 12pt; so-language: en-US }
+		p.cjk { font-family: "Droid Sans Fallback"; font-size: 12pt; so-language: zh-CN }
+		p.ctl { font-family: "FreeSans"; font-size: 12pt; so-language: hi-IN }
+	-->
+	</style>
+</head>
+<body lang="en-US" text="#00000a" dir="ltr">
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/version'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'active_record'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'awesome_print'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'filesize'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'total_compressor'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'docsplit'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'pdf_utils'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'prawn'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'pdf-reader'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/modules/tools.rb'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/modules/validating.rb'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/modules/unzipping.rb'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/modules/extracting.rb'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/modules/saving.rb'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">require
+'act_as_page_extractor/modules/interface'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">module
+ActAsPageExtractor</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+extend ActiveSupport::Concern</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+included do</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+before_create { self.page_extraction_state = EXTRACTING_STATES[:new]
+}</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+before_destroy :remove_files</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">  #
+attr_reader :options</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+module ClassMethods</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+def act_as_page_extractor(options: {})</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ define_method(:save_as_pdf){|*args| options[:save_as_pdf] }</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ define_method(:extracted_filename){|*args|
+self.send(options[:filename].to_sym) }</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ ActAsPageExtractor.define_singleton_method(:extracted_filename)
+{|*args| options[:filename] }</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ ActAsPageExtractor.define_singleton_method(:document_class) {|*args|
+options[:document_class].constantize }</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ define_method(:extracted_document_id){|*args| options[:document_id]
+}</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ define_method(:additional_fields){|*args|
+options[:additional_fields] }</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+EXTRACTING_STATES = {</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+new: 'new',</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+extracting: 'extracting',</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+extracted: 'extracted',</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+'error.extraction': 'error.extraction'</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+}.freeze</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+TMP_EXTRACTION_FILE_STORAGE = &quot;#{Dir.pwd}/tmp/page_extraction&quot;.freeze</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+FILE_STORAGE = &quot;#{Dir.pwd}/public&quot;.freeze</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+PDF_STORAGE = &quot;#{FILE_STORAGE}/uploads/extracted/pdf&quot;.freeze</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def initialized</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+# add all need callbacks</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ #on destroy remove pdf</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+#Add to Readme!!</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+#rails g act_as_page_extractor:migration Document category_id user_id</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+# add to [Document] model:</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+# has_many :extracted_pages, dependent: :destroy</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+create_pdf_dir</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def page_extract!</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+initialized</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+cleanup_pages</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+create_tmp_dir</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+begin</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ copy_document</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ # debug_info</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ unzip_document</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ if valid_document</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+   extract_pages</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+   save_to_db</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+ensure</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ update_state</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ save_pdf</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ finish</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def create_pdf_dir</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+if save_as_pdf</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">    
+ FileUtils::mkdir_p(PDF_STORAGE) unless File.exists?(PDF_STORAGE)</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def create_tmp_dir</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+@tmp_dir = &quot;#{TMP_EXTRACTION_FILE_STORAGE}/#{SecureRandom.hex(6)}&quot;</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+FileUtils::mkdir_p(@tmp_dir) unless File.exists?(@tmp_dir)</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def copy_document</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+@origin_document_path =
+&quot;#{FILE_STORAGE}#{self.send(:extracted_filename).url.to_s}&quot;</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+ap @origin_document_path</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+FileUtils.cp(@origin_document_path, @tmp_dir)</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+@copy_document_path =
+&quot;#{@tmp_dir}/#{@origin_document_path.split(&quot;/&quot;).last}&quot;</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+@document_filename = @origin_document_path.split(&quot;/&quot;).last</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def finish</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+remove_tmp_dir</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+def remove_tmp_dir</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">   
+FileUtils.rm_rf(@tmp_dir) if @tmp_dir =~ /\/tmp\//</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"> 
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#
+rails g model ExtractedPage page:text document_id:integer
+category_id:integer page_number:integer</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#
+Rails 4 way</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#
+9.2.7.1 Multiple Callback Methods in One Class</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#
+258 page</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%"><br>
+</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#
+class ActiveRecord::Base</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#  
+def self.acts_as_page_extractor(document_field=:filename)</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#   
+ auditor = Auditor.new(audit_log)</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#   
+ after_create auditor</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#   
+ after_update auditor</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#   
+ after_destroy auditor</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#  
+end</p>
+<p class="western" style="margin-bottom: 0in; line-height: 100%">#
+end</p>
+</body>
+</html>

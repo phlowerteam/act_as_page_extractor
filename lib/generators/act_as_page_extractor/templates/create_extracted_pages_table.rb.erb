@@ -1,0 +1,19 @@
+class <%= migration_class_name_page_extractor %> < ActiveRecord::Migration
+  def change
+    create_table :<%= page_extractor_table_name %> do |t|
+      t.text :page
+      t.integer :<%= documents_table_name.singularize %>_id, null: false
+      <% additional_fields.each do |field|%>
+      t.integer :<%= field %><%end%>
+      t.integer :page_number
+      t.timestamps
+    end
+
+    add_index :<%= page_extractor_table_name %>, :<%= documents_table_name.singularize %>_id
+    <% additional_fields.each do |field|%>
+    add_index :<%= page_extractor_table_name %>, :<%= field %><%end%>
+    <% additional_fields.each do |field|%>
+    add_index :<%= page_extractor_table_name %>, [:<%= documents_table_name.singularize %>_id, :<%= field %>]<%end%>
+    add_index :<%= page_extractor_table_name %>, [:<%= documents_table_name.singularize %>_id, :page_number]
+  end
+end

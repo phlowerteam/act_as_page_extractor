@@ -1,0 +1,8 @@
+class <%= migration_class_name_documents %> < ActiveRecord::Migration
+  def change
+    add_column :<%= documents_table_name %>, :page_extraction_state, :string, default: ''
+    add_column :<%= documents_table_name %>, :page_extraction_pages, :integer, default: 0
+    add_column :<%= documents_table_name %>, :page_extraction_doctype, :string, default: ''
+    add_column :<%= documents_table_name %>, :page_extraction_filesize, :string, default: ''
+  end
+end
