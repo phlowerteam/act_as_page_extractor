@@ -1,15 +1,15 @@
 PATH
   remote: .
   specs:
-    act_as_page_extractor (0.0.1)
+    act_as_page_extractor (0.1.1)
       activerecord (~> 4.1)
-      awesome_print
-      docsplit
-      filesize
-      pdf-reader
-      pdf_utils
+      awesome_print (~> 1.1, >= 1.1.0)
+      docsplit (~> 0)
+      filesize (~> 0)
+      pdf-reader (~> 1.4.0, >= 1.4.0)
+      pdf_utils (~> 0)
       prawn (~> 0.7.1)
-      total_compressor
+      total_compressor (~> 0)
 
 GEM
   remote: https://rubygems.org/
@@ -30,7 +30,7 @@ GEM
       tzinfo (~> 1.1)
     afm (0.2.2)
     arel (6.0.3)
-    awesome_print (1.7.0)
+    awesome_print (1.8.0)
     builder (3.2.2)
     byebug (9.0.5)
     diff-lcs (1.2.5)
@@ -55,7 +55,7 @@ GEM
     prawn-core (0.7.2)
     prawn-layout (0.7.2)
     prawn-security (0.7.1)
-    rake (11.2.2)
+    rake (0.9.6)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -70,16 +70,16 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     ruby-rc4 (0.1.5)
-    rubyzip (0.9.9)
+    rubyzip (1.2.2)
     simplecov (0.11.2)
       docile (~> 1.1.0)
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
     thread_safe (0.3.5)
-    total_compressor (0.1.6)
-      awesome_print
-      rubyzip (~> 0.9.9)
+    total_compressor (0.1.7)
+      awesome_print (~> 1.1, >= 1.1.0)
+      rubyzip (~> 1.2, >= 1.2.2)
     ttfunk (1.4.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -98,7 +98,7 @@ DEPENDENCIES
   pdf-reader
   pdf_utils
   prawn (~> 0.7.1)
-  rake
+  rake (~> 0)
   rspec (>= 2.14)
   simplecov
   total_compressor
