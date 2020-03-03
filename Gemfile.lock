@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    act_as_page_extractor (0.1.1)
+    act_as_page_extractor (0.1.2)
       activerecord (~> 4.1)
       awesome_print (~> 1.1, >= 1.1.0)
       docsplit (~> 0)
@@ -55,7 +55,7 @@ GEM
     prawn-core (0.7.2)
     prawn-layout (0.7.2)
     prawn-security (0.7.1)
-    rake (0.9.6)
+    rake (13.0.1)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -98,7 +98,7 @@ DEPENDENCIES
   pdf-reader
   pdf_utils
   prawn (~> 0.7.1)
-  rake (~> 0)
+  rake (~> 13)
   rspec (>= 2.14)
   simplecov
   total_compressor
