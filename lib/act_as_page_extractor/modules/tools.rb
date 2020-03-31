@@ -1,3 +1,5 @@
+require 'timeout'
+
 module ActAsPageExtractor
   def timeout_wrapper
     result = nil
