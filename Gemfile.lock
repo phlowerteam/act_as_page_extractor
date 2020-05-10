@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    act_as_page_extractor (0.1.4)
+    act_as_page_extractor (0.1.6)
       activerecord (~> 4.1)
       awesome_print (~> 1.1, >= 1.1.0)
       docsplit (~> 0)
