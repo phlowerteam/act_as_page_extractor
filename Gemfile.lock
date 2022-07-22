@@ -78,7 +78,7 @@ GEM
       awesome_print (~> 1.1, >= 1.1.0)
       rubyzip (~> 1.2, >= 1.2.2)
     ttfunk (1.6.2.1)
-    tzinfo (1.2.7)
+    tzinfo (1.2.10)
       thread_safe (~> 0.1)
 
 PLATFORMS
