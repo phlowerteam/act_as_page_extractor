@@ -50,3 +50,4 @@ build-iPhoneSimulator/
 /public/uploads/*
 .idea/*
 test/uploads
+.tool-versions
