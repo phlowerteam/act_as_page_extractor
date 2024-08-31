@@ -23,12 +23,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec',     '~> 0'
   spec.add_development_dependency 'simplecov', '~> 0'
 
-  spec.add_runtime_dependency 'activerecord',     '~> 6.0'
+  spec.add_runtime_dependency 'activerecord',     '~> 6'
   spec.add_runtime_dependency 'awesome_print',    '~> 1'
   spec.add_runtime_dependency 'docsplit',         '~> 0'                  # API for OpenOffice jodconverter (any to pdf)
   spec.add_runtime_dependency 'pdf_utils',        '~> 0'                  # getting text from pdf
-  spec.add_runtime_dependency 'prawn',            '~> 0.7.1'              # need for pdf_utils
-  spec.add_runtime_dependency 'pdf-reader',       '~> 1.4.0', '>= 1.4.0'  # need for pdf_utils
+  spec.add_runtime_dependency 'prawn',            '~> 0.7'                # need for pdf_utils
+  spec.add_runtime_dependency 'pdf-reader',       '~> 1.4', '>= 1.4'      # need for pdf_utils
   spec.add_runtime_dependency 'total_compressor', '~> 0'                  # decompressing files
   spec.add_runtime_dependency 'filesize',         '~> 0'                  # pretty size of file
 end
