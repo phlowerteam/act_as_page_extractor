@@ -1,17 +1,17 @@
 require 'timeout'
 
 module ActAsPageExtractor
+  # :nocov:
   def timeout_wrapper
     result = nil
     begin
       result = Timeout::timeout(60*5) { yield }
     rescue
-    # :nocov:
     ensure
-    # :nocov:
       result
     end
   end
+  # :nocov:
 
   def is_extracted
     @pdf_pages.to_i > 0 && self.extracted_pages.count == @pdf_pages
@@ -46,11 +46,11 @@ module ActAsPageExtractor
     # ap "@copy_document_path"
     # ap @copy_document_path
     # ap "@document_path"
-    ap @document_path
+      # ap @document_path
     # ap "@pdf_path"
     # ap @pdf_path
     # ap "@pdf_pages"
-    ap @pdf_pages
+      # ap @pdf_pages
   end
   # :nocov:
 end

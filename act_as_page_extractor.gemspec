@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['phlowerteam@gmail.com']
   spec.description   = %q{Library (Docsplit wrapper) for text extraction from pdf, doc/x, txt files with OpenOffice}
   spec.summary       = %q{Uses system calls}
-  spec.homepage      = 'https://github.com/phlowerteam'
+  spec.homepage      = 'https://github.com/phlowerteam/act_as_page_extractor'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
