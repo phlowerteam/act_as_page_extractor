@@ -1,3 +1,10 @@
+# Fix: https://github.com/documentcloud/docsplit/pull/159
+class File
+  class << self
+    alias_method :exists?, :exist?
+  end
+end
+
 module ActAsPageExtractor
   def extract_pages
     convert_to_pdf
