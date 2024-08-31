@@ -11,7 +11,7 @@ module ActAsPageExtractor
   end
 
   def save_to_db
-    self.update_attributes(page_extraction_state: EXTRACTING_STATES[:extracting])
+    self.update(page_extraction_state: EXTRACTING_STATES[:extracting])
     ExtractedPage.transaction do
       @pdf_pages&.times&.each do |pdf_page|
         page_filename = "#{@tmp_dir}/#{@document_filename.split('.').first}_#{(pdf_page + 1).to_s}.txt"

@@ -32,7 +32,7 @@ module ActAsPageExtractor
         page_extraction_doctype: @document_path&.split('.')&.last,
         page_extraction_filesize: Filesize.from("#{File.size(@document_path)} B").pretty
       })
-    self.update_attributes(updated_attributes)
+    self.update(updated_attributes)
   end
 
   def cleanup_pages

@@ -60,7 +60,7 @@ class Book
     array
   end
 
-  def update_attributes params
+  def update params
     params.each do |key, value|
       instance_eval("self.#{key} = #{value.class == String ? '\'' + value + '\'': value }")
     end
