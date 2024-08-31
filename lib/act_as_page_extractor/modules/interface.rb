@@ -10,7 +10,7 @@ module ActAsPageExtractor
   end
 
   def remove_files
-    FileUtils::rm_rf(pdf_path) if File.exists?(pdf_path.to_s)
+    FileUtils::rm_rf(pdf_path) if File.exist?(pdf_path.to_s)
   end
 
   def self.start_extraction

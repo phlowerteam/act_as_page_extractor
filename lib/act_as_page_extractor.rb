@@ -85,13 +85,13 @@ module ActAsPageExtractor
 
   def create_pdf_dir
     if save_as_pdf
-      FileUtils::mkdir_p(pdf_storage) unless File.exists?(pdf_storage)
+      FileUtils::mkdir_p(pdf_storage) unless File.exist?(pdf_storage)
     end
   end
 
   def create_tmp_dir
     @tmp_dir = "#{TMP_EXTRACTION_FILE_STORAGE}/#{SecureRandom.hex(6)}"
-    FileUtils::mkdir_p(@tmp_dir) unless File.exists?(@tmp_dir)
+    FileUtils::mkdir_p(@tmp_dir) unless File.exist?(@tmp_dir)
   end
 
   def copy_document

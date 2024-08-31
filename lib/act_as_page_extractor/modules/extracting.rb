@@ -10,7 +10,7 @@ module ActAsPageExtractor
      else
       if timeout_wrapper{ Docsplit.extract_pdf(@document_path, output: @tmp_dir)}
         pdf_path = (@document_path.split('.')[0..-2] + ['pdf']).join('.')
-        pdf_path if File.exists?(pdf_path)
+        pdf_path if File.exist?(pdf_path)
       end
     end
   end

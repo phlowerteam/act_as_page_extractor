@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in total_compressor.gemspec
 gemspec
 
+ruby '>= 3.2'
+
 gem 'activerecord', '~> 6'
 
 gem 'awesome_print'
