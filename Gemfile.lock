@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    act_as_page_extractor (0.6.1)
+    act_as_page_extractor (0.6.3)
       activerecord (~> 6)
       awesome_print (~> 1)
       docsplit (~> 0)
@@ -15,12 +15,12 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.3)
-    activemodel (6.1.7.8)
-      activesupport (= 6.1.7.8)
-    activerecord (6.1.7.8)
-      activemodel (= 6.1.7.8)
-      activesupport (= 6.1.7.8)
-    activesupport (6.1.7.8)
+    activemodel (6.1.7.10)
+      activesupport (= 6.1.7.10)
+    activerecord (6.1.7.10)
+      activemodel (= 6.1.7.10)
+      activesupport (= 6.1.7.10)
+    activesupport (6.1.7.10)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -35,7 +35,7 @@ GEM
     docsplit (0.7.6)
     filesize (0.2.0)
     hashery (2.1.2)
-    i18n (1.14.5)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     minitest (5.25.1)
     pdf-core (0.4.0)
@@ -77,7 +77,7 @@ GEM
     ttfunk (1.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    zeitwerk (2.6.17)
+    zeitwerk (2.7.1)
 
 PLATFORMS
   ruby
