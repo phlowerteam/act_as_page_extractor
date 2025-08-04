@@ -19,8 +19,25 @@ require 'act_as_page_extractor/modules/saving.rb'
 require 'act_as_page_extractor/modules/interface'
 
 module ActAsPageExtractor
-
   extend ActiveSupport::Concern
+
+  DEFAULT_ROOT_FOLDER = Dir.pwd.to_s
+  ERRORS = {
+    unknown_docsplit_error: 'Unknown Docsplit error'
+  }.freeze
+  ERROR_BACKTRACE_LINES = 15
+  EXTRACTING_STATES = {
+    new: 'new',
+    extracting: 'extracting',
+    extracted: 'extracted',
+    error_doctype: 'error_doctype',
+    error_extraction: 'error_extraction',
+    error_filesize: 'error_filesize'
+  }.freeze
+  EXTRACTION_TIMEOUT = 60*5 # 5 minutes
+  VALIDATE_COMPRESS_TYPES = ['zip', 'rar', '7z', 'gzip'].freeze
+  VALIDATE_DOC_TYPES = ['txt', 'pdf', 'doc', 'docx',
+                        'rtf', 'odt', 'htm', 'html'].freeze
 
   included do
     before_create { self.page_extraction_state = EXTRACTING_STATES[:new] }
@@ -35,23 +52,16 @@ module ActAsPageExtractor
       ActAsPageExtractor.define_singleton_method(:document_class) {|*args| Object.const_get(options[:document_class]) }
       define_method(:extracted_document_id){|*args| options[:document_id] }
       define_method(:additional_fields){|*args| options[:additional_fields] || [] }
-      define_method(:file_storage){|*args| options[:file_storage] || FILE_STORAGE }
-      define_method(:pdf_storage){|*args| options[:pdf_storage] || PDF_STORAGE }
+      define_method(:root_folder){|*args| options[:root_folder] || DEFAULT_ROOT_FOLDER }
+      define_method(:file_storage){|*args| options[:file_storage] || "#{root_folder}/public".freeze }
+      define_method(:pdf_storage){|*args| options[:pdf_storage] || "#{file_storage}/uploads/extracted/pdf".freeze }
+      define_method(:tmp_extraction_file_storage){|*args| "#{root_folder}/tmp/page_extraction" }
     end
   end
 
-  EXTRACTING_STATES = {
-    new: 'new',
-    extracting: 'extracting',
-    extracted: 'extracted',
-    'error.extraction': 'error.extraction'
-  }.freeze
-
-  TMP_EXTRACTION_FILE_STORAGE = "#{Dir.pwd}/tmp/page_extraction".freeze
-  FILE_STORAGE = "#{Dir.pwd}/public".freeze
-  PDF_STORAGE = "#{FILE_STORAGE}/uploads/extracted/pdf".freeze
-
   def initialized
+    @page_extraction_state = nil
+    @pages_extraction_errors = ''
     # add all need callbacks
       #on destroy remove pdf
 
@@ -90,7 +100,7 @@ module ActAsPageExtractor
   end
 
   def create_tmp_dir
-    @tmp_dir = "#{TMP_EXTRACTION_FILE_STORAGE}/#{SecureRandom.hex(6)}"
+    @tmp_dir = "#{tmp_extraction_file_storage}/#{SecureRandom.hex(6)}"
     FileUtils::mkdir_p(@tmp_dir) unless File.exist?(@tmp_dir)
   end
 

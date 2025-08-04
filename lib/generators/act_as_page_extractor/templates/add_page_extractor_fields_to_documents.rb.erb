@@ -4,5 +4,6 @@ class <%= migration_class_name_documents %> < ActiveRecord::Migration
     add_column :<%= documents_table_name %>, :page_extraction_pages, :integer, default: 0
     add_column :<%= documents_table_name %>, :page_extraction_doctype, :string, default: ''
     add_column :<%= documents_table_name %>, :page_extraction_filesize, :string, default: ''
+    add_column :<%= documents_table_name %>, :pages_extraction_errors, :text, default: ''
   end
 end
