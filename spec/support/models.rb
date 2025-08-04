@@ -14,7 +14,8 @@ class Book
                 :page_extraction_state,
                 :page_extraction_pages,
                 :page_extraction_doctype,
-                :page_extraction_filesize
+                :page_extraction_filesize,
+                :pages_extraction_errors
 
   def self.before_create &block
     yield
@@ -35,6 +36,7 @@ class Book
     filename:          :filename, # CarrierWave class with 'filename.url' method
     document_id:       :document_id,
     additional_fields: [:category_id, :user_id],
+    root_folder:       Dir.pwd.to_s,
     file_storage:      "#{Dir.pwd}/test/",
     pdf_storage:       "#{Dir.pwd}/test/uploads/extracted/pdf"
   }
@@ -44,6 +46,7 @@ class Book
     @id = @category_id = @user_id = nil
     @page_extraction_state = @page_extraction_pages = nil
     @page_extraction_doctype = @page_extraction_filesize = nil
+    @pages_extraction_errors = ''
     ExtractedPage.cleanup
   end
 
@@ -62,7 +65,13 @@ class Book
 
   def update params
     params.each do |key, value|
-      instance_eval("self.#{key} = #{value.class == String ? '\'' + value + '\'': value }")
+      if value.nil?
+        instance_eval("self.#{key} = nil")
+      elsif value.class == String
+        instance_eval("self.#{key} = \"#{value}\"")
+      else
+        instance_eval("self.#{key} = #{value}")
+      end
     end
   end
 end

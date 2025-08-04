@@ -3,11 +3,11 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in total_compressor.gemspec
 gemspec
 
-ruby '>= 3.2'
+ruby '3.2.3'
 
 gem 'activerecord', '~> 6'
 
-gem 'awesome_print'
+gem 'amazing_print'
 
 gem 'docsplit'            # API for OpenOffice jodconverter (any to pdf)
 gem 'pdf_utils'           # getting text from pdf

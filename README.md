@@ -8,13 +8,26 @@ Library for extracting plain text from documents(files) for further processing (
 Install appropriate tools before using:
 
 ```sh
-sudo apt-get install zlib1g zlib1g-dev zip rar p7zip-full
+# Packages for decompression documents by this tool https://github.com/phlowerteam/total_compressor
+sudo apt-get install -y zlib1g zlib1g-dev zip rar p7zip-full
+
+# Packages for parsing documents by this util https://documentcloud.github.io/docsplit from the LibreOffice package
+sudo apt-get install -y \
+  jodconverter \
+  nautilus-filename-repairer python3-chardet xfonts-encodings libfontenc1 console-setup \
+  fontconfig fontconfig-config fonts-kacst fonts-kacst-one fonts-khmeros-core fonts-lao \
+  fonts-liberation fonts-nanum fonts-opensymbol fonts-sil-gentium-basic fonts-takao-pgothic \
+  fonts-thai-tlwg fonts-tlwg-garuda fonts-tlwg-kinnari fonts-tlwg-loma fonts-tlwg-mono \
+  fonts-tlwg-norasi fonts-tlwg-purisa fonts-tlwg-sawasdee fonts-tlwg-typewriter fonts-tlwg-typist \
+  fonts-tlwg-typo fonts-tlwg-umpush fonts-tlwg-waree fonts-ubuntu fonts-wqy-microhei \
+  gnome-font-viewer gsfonts gucharmap kbd libfontconfig1 libfontenc1 libfreetype6 libxft2 \
+  x11-xfs-utils xfonts-base xfonts-encodings xfonts-scalable xfonts-utils
 ```
+
 Add this line to your application's Gemfile:
 
 ```rb
 gem 'act_as_page_extractor'
-bundle
 ```
 ## Usage
 
@@ -32,6 +45,7 @@ class AddPageExtractorFields < ActiveRecord::Migration
     add_column :documents, :page_extraction_pages, :integer, default: 0
     add_column :documents, :page_extraction_doctype, :string, default: ''
     add_column :documents, :page_extraction_filesize, :string, default: ''
+    add_column :documents, :pages_extraction_errors, :string, default: ''
   end
 end
 
@@ -69,8 +83,9 @@ Add to model next parameters for initializing:
       filename:          :filename,
       document_id:       :document_id,
       additional_fields: [:category_id, :user_id],
-      #file_storage:      "/full/path/to/documents/storage",
-      #pdf_storage:       "/full/path/to/extracted/pdf/storage"
+      root_folder:       "/full/path/to/project" || Rails.root.to_s,
+      # file_storage:      "/full/path/to/project/public/uploads/documents/storage",
+      # pdf_storage:       "/full/path/to/project/public/uploads/extracted/pdf/storage"
     }
 
     has_many :extracted_pages, dependent: :destroy
@@ -110,6 +125,7 @@ Parameters of initializing **act_as_page_extractor**:
 
 ## Run tests
 ```sh
+bundle install
 rspec
 ```
 ## Contributing
@@ -124,5 +140,5 @@ https://github.com/phlowerteam
 phlowerteam@gmail.com
 
 ## License
-Copyright (c) 2024 PhlowerTeam
-MIT License
+
+MIT License © 2025 PhlowerTeam
