@@ -5,7 +5,7 @@ gemspec
 
 ruby '3.2.3'
 
-gem 'activerecord', '~> 6'
+gem 'activerecord'
 
 gem 'amazing_print'
 

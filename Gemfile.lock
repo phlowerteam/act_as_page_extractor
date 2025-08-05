@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    act_as_page_extractor (0.6.5)
-      activerecord (~> 6)
+    act_as_page_extractor (0.7.0)
+      activerecord (>= 6)
       amazing_print (~> 1)
       docsplit (~> 0)
       filesize (~> 0)
@@ -85,7 +85,7 @@ PLATFORMS
 
 DEPENDENCIES
   act_as_page_extractor!
-  activerecord (~> 6)
+  activerecord
   amazing_print
   bundler (>= 2.2.33)
   byebug
