@@ -1,43 +1,27 @@
 act_as_page_extractor
 ================
 
-Library for extracting plain text from documents(files) for further processing (indexing and searching).
+A library that extracts plain text from documents for subsequent processing, such as indexing and search.
 
 ## Installation
 
-Install appropriate tools before using:
-
+Install all dependencies before use:
 ```sh
-# Packages for decompression documents by this tool https://github.com/phlowerteam/total_compressor
-sudo apt-get install -y zlib1g zlib1g-dev zip rar p7zip-full
-
-# Packages for parsing documents by this util https://documentcloud.github.io/docsplit from the LibreOffice package
-sudo apt-get install -y \
-  jodconverter \
-  nautilus-filename-repairer python3-chardet xfonts-encodings libfontenc1 console-setup \
-  fontconfig fontconfig-config fonts-kacst fonts-kacst-one fonts-khmeros-core fonts-lao \
-  fonts-liberation fonts-nanum fonts-opensymbol fonts-sil-gentium-basic fonts-takao-pgothic \
-  fonts-thai-tlwg fonts-tlwg-garuda fonts-tlwg-kinnari fonts-tlwg-loma fonts-tlwg-mono \
-  fonts-tlwg-norasi fonts-tlwg-purisa fonts-tlwg-sawasdee fonts-tlwg-typewriter fonts-tlwg-typist \
-  fonts-tlwg-typo fonts-tlwg-umpush fonts-tlwg-waree fonts-ubuntu fonts-wqy-microhei \
-  gnome-font-viewer gsfonts gucharmap kbd libfontconfig1 libfontenc1 libfreetype6 libxft2 \
-  x11-xfs-utils xfonts-base xfonts-encodings xfonts-scalable xfonts-utils
+sh Aptfile.sh
 ```
 
-Add this line to your application's Gemfile:
-
+Add this to your Gemfile:
 ```rb
 gem 'act_as_page_extractor'
 ```
 ## Usage
 
-For example, for model Document in the Rails framework we need run:
-
+Generate a migration, for example for a Document model:
 ```sh
 rails g act_as_page_extractor:migration Document category_id user_id
 ```
 
-As a result we get two migration files:
+This will generate two migration files:
 ```rb
 class AddPageExtractorFields < ActiveRecord::Migration
   def change
@@ -79,21 +63,20 @@ Add to model next parameters for initializing:
 
     act_as_page_extractor options: {
       document_class:    'Document',
-      save_as_pdf:       true,
+      save_as_pdf:       true, # store converted document as PDF
       filename:          :filename,
       document_id:       :document_id,
-      additional_fields: [:category_id, :user_id],
-      root_folder:       "/full/path/to/project" || Rails.root.to_s,
-      # file_storage:      "/full/path/to/project/public/uploads/documents/storage",
-      # pdf_storage:       "/full/path/to/project/public/uploads/extracted/pdf/storage"
+      additional_fields: [:category_id, :user_id], # copy values of these fields from document to extracted_page
+      root_folder:       Rails.root.to_s, # or "/full/path/to/project", it needs to share folder between deployments
+      # file_storage:      "/full/path/to/project/public/uploads/documents/storage" # optional
+      # pdf_storage:       "/full/path/to/project/public/uploads/extracted/pdf/storage" # optional
     }
 
     has_many :extracted_pages, dependent: :destroy
 end
 ```
 
-Now our instance has few new methods:
-
+The instance now provides several new methods:
 ```rb
 document = Document.first
 document.page_extract!
@@ -115,29 +98,23 @@ ActAsPageExtractor.statistics
 
 Parameters of initializing **act_as_page_extractor**:
 
-* **document_class** - name of model (e.g. Document)
-* **save_as_pdf** - boolean [true, false] when we want save temporary pdf
-* **filename** - name of field which contains access to the file and it should be an object with 'url' method that returns path to file (e.g. CarrierWave object with 'filename.url')
-* **document_id** - name for saving id
-* **additional_fields** - additional fields that added to extracted page (e.g. for indexing, etc.)
-* **file_storage** - path for saving tmp files (by default it is "public")
-* **pdf_storage** - path for saving pdf (by default it is "public/uploads/extracted/pdf")
+* **document_class** — The name of the model (e.g., `Document`).
+* **save_as_pdf** — Boolean (`true`/`false`). Indicates whether to save a temporary PDF.
+* **filename** — The field containing access to the file. This should be an object with a `url` method that returns the file path (e.g., a CarrierWave object with `filename.url`).
+* **document_id** — The field name for storing the document ID.
+* **additional_fields** — Extra fields to be added to the extracted page (useful for indexing, etc.).
+* **root_folder** — The root folder to be shared across deployments (e.g., `Rails.root.to_s`).
+* **file_storage** — Path for saving temporary files (default: `"public"`).
+* **pdf_storage** — Path for saving PDFs (default: `"public/uploads/extracted/pdf"`).
 
 ## Run tests
 ```sh
-bundle install
+bundle
 rspec
 ```
-## Contributing
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
 
 ## Contacts
-https://github.com/phlowerteam
-phlowerteam@gmail.com
+https://github.com/phlowerteam / phlowerteam[A]gmail.com
 
 ## License
 
