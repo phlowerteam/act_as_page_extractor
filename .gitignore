@@ -20,6 +20,7 @@ build/
 *.bridgesupport
 build-iPhoneOS/
 build-iPhoneSimulator/
+.byebug_history
 
 ## Specific to RubyMotion (use of CocoaPods):
 #

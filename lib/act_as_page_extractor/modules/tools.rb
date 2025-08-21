@@ -5,8 +5,9 @@ module ActAsPageExtractor
   def timeout_wrapper
     result = nil
     begin
-      result = Timeout::timeout(60*5) { yield }
-    rescue
+      result = Timeout::timeout(EXTRACTION_TIMEOUT) { yield }
+    rescue StandardError => e
+      add_error(e)
     ensure
       result
     end
@@ -25,18 +26,27 @@ module ActAsPageExtractor
       }
     else
       {
-        page_extraction_state: EXTRACTING_STATES[:'error.extraction'],
+        page_extraction_state: @page_extraction_state || EXTRACTING_STATES[:error_extraction],
         page_extraction_pages: 0
       }
     end.merge({
         page_extraction_doctype: @document_path&.split('.')&.last,
-        page_extraction_filesize: Filesize.from("#{File.size(@document_path)} B").pretty
+        page_extraction_filesize: Filesize.from("#{File.size(@document_path)} B").pretty,
+        pages_extraction_errors: @pages_extraction_errors.chomp
       })
     self.update(updated_attributes)
   end
 
   def cleanup_pages
     self.extracted_pages.destroy_all
+  end
+
+  def add_error(e)
+    if ERRORS.values.include?(e.message)
+      @pages_extraction_errors << "#{e.message}\n\n"
+    else
+      @pages_extraction_errors << "#{e.class}, #{e.message}\n#{e.backtrace[0..ERROR_BACKTRACE_LINES].join("\n")}\n"
+    end
   end
 
   # :nocov:

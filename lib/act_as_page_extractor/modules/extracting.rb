@@ -20,23 +20,22 @@ module ActAsPageExtractor
         pdf_path if File.exist?(pdf_path)
       end
     end
+  rescue StandardError => e
+    add_error(e)
   end
 
   def convert_to_text
-    begin
-      @pdf_pages = PdfUtils.info(@pdf_path).pages
-      if @pdf_pages
-        if timeout_wrapper{ Docsplit::extract_text(@pdf_path, ocr: false, pages: 'all', output: @tmp_dir) }
-        else
-          # :nocov:
-          @pdf_pages = nil
-          raise
-          # :nocov:
-        end
+    @pdf_pages = PdfUtils.info(@pdf_path).pages
+    if @pdf_pages
+      if timeout_wrapper{ Docsplit::extract_text(@pdf_path, ocr: false, pages: 'all', output: @tmp_dir) }
+      else
+        # :nocov:
+        @pdf_pages = nil
+        raise ERRORS[:unknown_docsplit_error]
+        # :nocov:
       end
-    # :nocov:
-    rescue
     end
-    # :nocov:
+  rescue StandardError => e
+    add_error(e)
   end
 end

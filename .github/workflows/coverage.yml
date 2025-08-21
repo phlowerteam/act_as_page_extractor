@@ -1,0 +1,32 @@
+# .github/workflows/coverage.yml
+name: Coverage
+
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.3
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libreoffice unoconv poppler-utils zlib1g zlib1g-dev zip rar p7zip-full
+          bundle install --jobs 4 --retry 3
+      - name: Run tests with coverage
+        run: |
+          bundle exec rspec
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/.resultset.json,./coverage/coverage.json,./coverage/index.html
+          fail_ci_if_error: false
