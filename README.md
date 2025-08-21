@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/phlowerteam/act_as_page_extractor/branch/41-Feature-Improve-error-procesing/graph/badge.svg)](https://codecov.io/gh/phlowerteam/act_as_page_extractor)
+
 act_as_page_extractor
 ================
 

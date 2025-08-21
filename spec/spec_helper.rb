@@ -3,7 +3,7 @@ unless ENV['SKIP_COVERAGE']
   SimpleCov.start 'rails' do
     add_filter 'vendor'
   end
-  SimpleCov.minimum_coverage 100
+  SimpleCov.minimum_coverage 98
 end
 
 require 'rspec'

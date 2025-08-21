@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.7.0] - 2025-08-05
+## [0.7.0] - 2025-08-21
 ### Added
 - Breaking changes: added root folder as an option to access the folder between deployments, improved error processing ([883cafc], [b10a367])
 
