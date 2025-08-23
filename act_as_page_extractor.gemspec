@@ -18,13 +18,13 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 3.2'
 
-  spec.add_development_dependency 'bundler', '>= 2.2.33'
+  spec.add_development_dependency 'bundler',   '~> 2.2', '>= 2.2.33'
   spec.add_development_dependency 'rake',      '~> 12', '>= 12.3.3'
   spec.add_development_dependency 'byebug',    '~> 0'
   spec.add_development_dependency 'rspec',     '~> 0'
   spec.add_development_dependency 'simplecov', '~> 0'
 
-  spec.add_runtime_dependency 'activerecord',     '>= 6'
+  spec.add_runtime_dependency 'activerecord',     '~> 6.0'
   spec.add_runtime_dependency 'amazing_print',    '~> 1'
   spec.add_runtime_dependency 'docsplit',         '~> 0'                  # API for OpenOffice jodconverter (any to pdf)
   spec.add_runtime_dependency 'pdf_utils',        '~> 0'                  # getting text from pdf
