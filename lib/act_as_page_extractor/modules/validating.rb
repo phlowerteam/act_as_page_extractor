@@ -5,7 +5,7 @@ module ActAsPageExtractor
 
   def validate_size
     mb = 2**20
-    valid = File.size(@copy_document_path) <= 1*mb
+    valid = File.size(@copy_document_path) <= 20*mb
 
     unless valid
       @page_extraction_state = EXTRACTING_STATES[:error_filesize]

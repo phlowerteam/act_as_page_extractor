@@ -1,8 +1,8 @@
 PATH
   remote: .
   specs:
-    act_as_page_extractor (0.8.0)
-      activerecord (~> 8.0)
+    act_as_page_extractor (0.7.3)
+      activerecord (~> 7.0)
       amazing_print (~> 1)
       docsplit (~> 0)
       filesize (~> 0)
@@ -15,13 +15,13 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.0.3)
-    activemodel (8.0.2.1)
-      activesupport (= 8.0.2.1)
-    activerecord (8.0.2.1)
-      activemodel (= 8.0.2.1)
-      activesupport (= 8.0.2.1)
+    activemodel (7.2.2.2)
+      activesupport (= 7.2.2.2)
+    activerecord (7.2.2.2)
+      activemodel (= 7.2.2.2)
+      activesupport (= 7.2.2.2)
       timeout (>= 0.4.0)
-    activesupport (8.0.2.1)
+    activesupport (7.2.2.2)
       base64
       benchmark (>= 0.3)
       bigdecimal
@@ -33,7 +33,6 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-      uri (>= 0.13.1)
     afm (0.2.2)
     amazing_print (1.8.1)
     awesome_print (1.9.2)
@@ -94,7 +93,6 @@ GEM
     ttfunk (1.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    uri (1.0.3)
 
 PLATFORMS
   x86_64-linux
