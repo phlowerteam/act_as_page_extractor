@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'act_as_page_extractor'
+require 'tmpdir'
 
 describe ActAsPageExtractor do
   context 'correct extraction' do
@@ -21,9 +22,9 @@ describe ActAsPageExtractor do
         ActAsPageExtractor.start_extraction
         expect(book.page_extraction_state).to eq ActAsPageExtractor::EXTRACTING_STATES[:extracted]
         expect(ExtractedPage.array.count).to eq 4
-        expect(ExtractedPage.array[0][:page]).to match /on a tall column, stood the statue of the Happy Prince/
-        unless document.match /pdf/
-          expect(book.pdf_path).to match /pdf/
+        expect(ExtractedPage.array[0][:page]).to match(/on a tall column, stood the statue of the Happy Prince/)
+        unless document.match(/pdf/)
+          expect(book.pdf_path).to match(/pdf/)
           expect(book.remove_files.count).to eq 1
           expect(book.pages_extraction_errors).to be_empty
         end
@@ -79,5 +80,48 @@ describe ActAsPageExtractor do
         expect(book.pages_extraction_errors).to match(error_msg)
       end
     end
+
+    context 'when file is less than 20MB' do
+      let(:filename) { 'normal_file.txt' }
+      let(:tmp_dir) { File.expand_path("../test/", __dir__) }
+      let(:document) { File.join(tmp_dir, filename) }
+
+      before { build_file(tmp_dir, document, size_mb: 3) }
+
+      after { File.delete(document) if File.exist?(document) }
+
+      it 'converts without errors' do
+        book = Book.new({ doc_path: filename })
+        allow(Book).to receive_message_chain('where') { [book] }
+        ActAsPageExtractor.start_extraction
+        expect(book.page_extraction_state).to eq ActAsPageExtractor::EXTRACTING_STATES[:extracted]
+        expect(book.pages_extraction_errors).to eq ""
+      end
+    end
+
+    context 'when file is larger than 20MB' do
+      let(:filename) { 'large_file.txt' }
+      let(:tmp_dir) { File.expand_path("../test/", __dir__) }
+      let(:document) { File.join(tmp_dir, filename) }
+
+      before { build_file(tmp_dir, document, size_mb: 22) }
+
+      after { File.delete(document) if File.exist?(document) }
+
+      it 'sets error_filesize state and logs error' do
+        book = Book.new({ doc_path: filename })
+        allow(Book).to receive_message_chain('where') { [book] }
+        ActAsPageExtractor.start_extraction
+        expect(book.page_extraction_state).to eq ActAsPageExtractor::EXTRACTING_STATES[:error_filesize]
+        expect(book.pages_extraction_errors).to match('error_filesize')
+      end
+    end
+  end
+end
+
+def build_file(dir, file, size_mb:)
+  FileUtils.mkdir_p(dir)
+  File.open(file, "w") do |f|
+    size_mb.times { f.write("a " * 1024 * 512) }
   end
 end
